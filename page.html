@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>login</title>
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script></script>
+	<script type="text/javascript" src="/static/jquery.qrcode.min.js"></script>
+</head>
+<body>
+	<div id="qrcode"></div>
+	<div id="result"></div>
+	<script type="text/javascript">
+		$.get('/state', function (data) {
+			$('#qrcode').qrcode({
+				text: "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5f8976fb0725b9f9&redirect_uri=http%3A%2F%2Flogin.duohuo.org%2Fsuccess&response_type=code&scope=snsapi_userinfo&state="+data+"#wechat_redirect"
+			});
+		});
+		var int=self.setInterval('check()', 4000);
+		function check() {
+			$.get('/result', function(data) {
+				if(data == 'success') {
+					int = window.clearInterval(int);
+					$('#qrcode').hide();
+					$('#result').html('success!');
+				}
+			});
+		}
+	</script>
+</body>
+</html>
